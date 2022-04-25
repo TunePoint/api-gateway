@@ -1,15 +1,11 @@
 package ua.tunepoint.gateway.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 import ua.tunepoint.auth.model.response.UserResponse;
-import ua.tunepoint.auth.model.response.domain.User;
 import ua.tunepoint.security.UserView;
-
-import java.util.Optional;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
@@ -17,10 +13,10 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 @RequiredArgsConstructor
 public class AuthService {
 
-    private final WebClient webClient;
+    private final WebClient.Builder webClient;
 
     public Mono<UserView> authenticateUser(String jwtHeader) {
-        var responseMono = webClient.get()
+        var responseMono = webClient.build().get()
                 .uri("/auth")
                 .header(AUTHORIZATION, jwtHeader)
                 .retrieve().bodyToMono(UserResponse.class);
