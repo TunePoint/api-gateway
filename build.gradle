@@ -32,7 +32,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
 
 
-    implementation 'ua.tunepoint:commons-security:0.0.3'
+    implementation 'ua.tunepoint:commons-security:0.0.5'
     implementation 'ua.tunepoint:auth-model:0.0.7'
     implementation 'ua.tunepoint:auth-api:0.0.7'
     implementation 'ua.tunepoint:commons-web-model:0.0.3'
