@@ -31,18 +31,25 @@ public class UserContextAuthorizationFilter implements GlobalFilter, Ordered {
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         log.info("Processing request...");
 
-        if (ignore.matches(PathContainer.parsePath(exchange.getRequest().getURI().toString()))) {
-            return chain.filter(exchange);
+        final var safeExchange = exchange.mutate()
+                .request(request -> {
+                    request.headers(
+                            httpHeaders -> httpHeaders.remove(USER_CONTEXT)
+                    );
+                }).build();
+
+        if (ignore.matches(PathContainer.parsePath(safeExchange.getRequest().getURI().toString()))) {
+            return chain.filter(safeExchange);
         }
 
-        final var bearerHolder = extractBearer(exchange.getRequest());
+        final var bearerHolder = extractBearer(safeExchange.getRequest());
 
         if (bearerHolder.isPresent()) {
             var bearer = bearerHolder.get();
             var userMono = authService.authenticateUser(bearer);
 
             return userMono.flatMap(user -> {
-                var newExchange = exchange.mutate()
+                var newExchange = safeExchange.mutate()
                         .request(request -> {
                             request.header(
                                     USER_CONTEXT,
@@ -55,14 +62,14 @@ public class UserContextAuthorizationFilter implements GlobalFilter, Ordered {
             }).onErrorResume(t -> {
                 log.error("Error occurred while authenticating user", t);
 
-                var errorResponse = exchange.getResponse();
+                var errorResponse = safeExchange.getResponse();
                 errorResponse.setRawStatusCode(HttpStatus.UNAUTHORIZED.value());
 
                 return errorResponse.setComplete();
             });
         }
 
-        return chain.filter(exchange);
+        return chain.filter(safeExchange);
     }
 
     private Optional<String> extractBearer(ServerHttpRequest request) {
