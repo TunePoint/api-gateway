@@ -11,11 +11,19 @@ spring:
         - id: account
           uri: lb://account-service
           predicates:
-            - Path=/profiles/**
+            - Path=/accounts/**
         - id: resource
           uri: lb://resource-service
           predicates:
-            - Path=/images/**,/audio/**
+            - Path=/resource/**
+        - id: search
+          uri: lb://search-service
+          predicates:
+            - Path=/search/**
+        - id: audio
+          uri: lb://audio-service
+          predicates:
+            - Path=/audio/**,/playlists/**,/comments/**
       discovery:
         locator:
           enabled: true
@@ -24,7 +32,7 @@ eureka:
     register-with-eureka: true
     fetch-registry: true
     service-url:
-      defaultZone: http://localhost:8765/eureka
+      defaultZone: ${EUREKA_URL:http://localhost:8765/eureka}
 
 auth:
   service-id: auth-service
