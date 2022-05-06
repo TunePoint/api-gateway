@@ -7,7 +7,7 @@ plugins {
 }
 
 group = 'ua.tunepoint'
-version = '0.0.2'
+version = '0.0.3'
 sourceCompatibility = '17'
 
 configurations {
