@@ -29,7 +29,7 @@ spring:
         - id: audio
           uri: lb://audio-service
           predicates:
-            - Path=/audio/**,/playlists/**,/comments/**
+            - Path=/audio/**,/playlists/**,/comments/**,/genres/**,/tags/**
       discovery:
         locator:
           enabled: true
