@@ -6,11 +6,9 @@ spring:
       globalcors:
         corsConfigurations:
           '[/**]':
+            allowedHeaders: "*"
             allowedOrigins: "*"
-            allowedMethods:
-              - GET
-              - POST
-              - PUT
+            allowedMethods: "*"
       routes:
         - id: auth
           uri: lb://auth-service
@@ -37,8 +35,8 @@ spring:
           enabled: true
 eureka:
   client:
-    register-with-eureka: true
-    fetch-registry: true
+    register-with-eureka: false
+    fetch-registry: false
     service-url:
       defaultZone: ${EUREKA_URL:http://localhost:8765/eureka}
 
