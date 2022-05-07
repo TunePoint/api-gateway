@@ -8,7 +8,11 @@ spring:
           '[/**]':
             allowedHeaders: "*"
             allowedOrigins: "*"
-            allowedMethods: "*"
+            allowedMethods:
+              - POST
+              - PUT
+              - GET
+              - OPTIONS
       routes:
         - id: auth
           uri: lb://auth-service
