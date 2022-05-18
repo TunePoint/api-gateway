@@ -30,6 +30,10 @@ spring:
           uri: lb://audio-service
           predicates:
             - Path=/audio/**,/playlists/**,/comments/**,/genres/**,/tags/**
+        - id: shelf
+          uri: lb://shelf-service
+          predicates:
+            - Path=/shelf/**
       discovery:
         locator:
           enabled: true
